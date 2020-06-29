@@ -45,6 +45,7 @@ export const AppContainer = ({ children }) => {
   useEffect(() => {
     socket.on('notifications', (data) => {
       console.log('notification');
+      console.log(data);
       handleNotification();
     });
   }, []);
