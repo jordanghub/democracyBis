@@ -1,0 +1,11 @@
+.next
+node_modules
+task.todo
+report.2020*
+coverage
+.vscode
+Dockerfile
+.dockerignore
+.env
+yarn-error.log
+.idea
