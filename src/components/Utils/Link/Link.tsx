@@ -7,8 +7,8 @@ import Link from 'next/link';
 import { Button } from '@material-ui/core';
 
 export const LinkComponent = memo(
-  ({ to, children, visibleLink, isButton }: LinkProps) => (
-    <Link href={to} as={visibleLink}>
+  ({ to, children, visibleLink, isButton, shallow = false }: LinkProps) => (
+    <Link href={to} as={visibleLink} shallow={shallow}>
       {isButton ? (
         <Button href={visibleLink ? visibleLink : to}>{children}</Button>
       ) : (

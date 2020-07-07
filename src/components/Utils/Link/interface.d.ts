@@ -5,4 +5,5 @@ export interface LinkProps {
   children: ReactNode;
   visibleLink?: string;
   isButton?: boolean;
+  shallow?: boolean;
 }

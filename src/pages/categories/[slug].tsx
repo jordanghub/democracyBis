@@ -1,21 +1,26 @@
 export const dfhjqsdkjfh = 'dshfjklshdfksh';
 
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useEffect } from 'react';
 
-import { Container, ThreadHomepage } from 'components';
+import { Container, ThreadHomepage, Loader } from 'components';
 import { NextPage, NextPageContext } from 'next';
 import { Store } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { TState } from 'types/state';
 import { Typography } from '@material-ui/core';
 import { BaseLayout } from 'containers';
-import { Pagination } from 'components/Utils/Pagination';
-import { fetchThreadsByCategory } from 'store/actions';
+import { fetchThreadsByCategory, changeCategoryThreads } from 'store/actions';
 import { useRouter } from 'next/router';
+import { useInfiniteScroll } from 'hooks/useInfiniteScroll';
+import { usePagination, usePrevious } from 'hooks';
 
 const Category: NextPage = memo(() => {
   const router = useRouter();
   const dispatch = useDispatch();
+
+  const id = router.query.slug;
+
+  const previousId = usePrevious(id);
 
   const threads = useSelector((state: TState) => state.thread.categoryThreads);
 
@@ -23,14 +28,46 @@ const Category: NextPage = memo(() => {
     (state: TState) => state.votes.scoringCategories,
   );
 
-  const paginationData = useSelector(
-    (state: TState) => state.pagination['category-threads'],
-  );
   const categories = useSelector((state: TState) => state.thread.categories);
 
   const category = categories.find(
     (cat) => cat.id === Number(router.query.slug),
   );
+
+  const fethLatestThreadsAction = useCallback(
+    (payload) => dispatch(fetchThreadsByCategory(payload)),
+    [dispatch],
+  );
+
+  const handleCategoryPageChange = ({ page }) => {
+    fethLatestThreadsAction({
+      page,
+      categoryId: router.query.slug,
+    });
+  };
+
+  const { isLoading, handlePageChange, paginationData } = usePagination(
+    'category-threads',
+    handleCategoryPageChange,
+  );
+
+  if (typeof window !== 'undefined') {
+    useInfiniteScroll(null, handlePageChange, true);
+  }
+
+  useEffect(() => {
+    if (previousId && previousId !== id) {
+      fethLatestThreadsAction({ page: 1, categoryId: Number(id) });
+    }
+
+    return () => {
+      dispatch(
+        changeCategoryThreads({
+          threads: null,
+        }),
+      );
+    };
+  }, [id]);
 
   const threadList = threads?.map((thread) => (
     <ThreadHomepage
@@ -48,27 +85,10 @@ const Category: NextPage = memo(() => {
     />
   ));
 
-  const fethLatestThreadsAction = useCallback(
-    (payload) => dispatch(fetchThreadsByCategory(payload)),
-    [dispatch],
-  );
-
-  const handlePageChange = useCallback(
-    (evt, page: number) => {
-      if (page + 1 <= paginationData.pages) {
-        fethLatestThreadsAction({
-          page: page + 1,
-          categoryId: router.query.slug,
-        });
-      }
-    },
-    [paginationData],
-  );
-
   return (
     <BaseLayout>
       <Container>
-        {(!threadList || threadList.length === 0) && (
+        {threadList && threadList.length === 0 && (
           <Typography variant="h4" component="h2">
             Aucun résultat
           </Typography>
@@ -79,21 +99,10 @@ const Category: NextPage = memo(() => {
               Threads de la catégorie {category?.name.toLowerCase()}
             </Typography>
             {threadList}
-            {paginationData && (
-              <Pagination
-                count={paginationData.count}
-                page={
-                  paginationData.currentPage > 0
-                    ? paginationData.currentPage - 1
-                    : 0
-                }
-                pageSize={5}
-                onPageChange={handlePageChange}
-              />
-            )}
           </>
         )}
       </Container>
+      {(isLoading || !threadList) && <Loader />}
     </BaseLayout>
   );
 });

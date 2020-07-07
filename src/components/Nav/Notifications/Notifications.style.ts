@@ -45,6 +45,7 @@ export const NotificationsContainer = styled.div`
   /* Track */
   &::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(190, 190, 190, 0.3);
+    box-shadow: inset 0 0 6px rgba(190, 190, 190, 0.3);
     -webkit-border-radius: 5px;
     border-radius: 5px;
   }
@@ -55,6 +56,7 @@ export const NotificationsContainer = styled.div`
     border-radius: 5px;
     background: rgba(190, 190, 190, 0.3);
     -webkit-box-shadow: inset 0 0 6px rgba(190, 190, 190, 0.3);
+    box-shadow: inset 0 0 6px rgba(190, 190, 190, 0.3);
   }
   &::-webkit-scrollbar-thumb:window-inactive {
     background: rgba(190, 190, 190, 0.3);

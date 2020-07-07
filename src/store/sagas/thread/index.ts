@@ -76,6 +76,8 @@ export function* fetchSearchThread({ type, payload }) {
 export function* fetchThreadByCategory({ type, payload }) {
   const axios = getAxios();
 
+  const items = yield select((state: TState) => state.thread.categoryThreads);
+
   try {
     const response = yield axios.get(
       `${BASE_API_URL}${CATEGORIES_ENDPOINT}/${payload.categoryId}/threads`,
@@ -89,7 +91,7 @@ export function* fetchThreadByCategory({ type, payload }) {
 
     yield put(
       changeCategoryThreads({
-        threads: data.items,
+        threads: [...(items || []), ...data.items],
       }),
     );
     yield put(

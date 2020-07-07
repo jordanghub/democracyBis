@@ -31,7 +31,10 @@ export const usePagination = (key: string, changePageCallback: any) => {
       return;
     }
 
-    if (paginationData.currentPage + 1 <= paginationData.pages) {
+    if (
+      paginationData &&
+      paginationData.currentPage + 1 <= paginationData.pages
+    ) {
       changeIsLoading(true);
       changePageCallback({ page: paginationData.currentPage + 1 });
     }
@@ -41,5 +44,6 @@ export const usePagination = (key: string, changePageCallback: any) => {
     isLoading,
     changeIsLoading,
     handlePageChange,
+    paginationData,
   };
 };

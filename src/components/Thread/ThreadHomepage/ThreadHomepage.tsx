@@ -49,6 +49,7 @@ export const ThreadHomepage = ({
                   key={category.id}
                   to={`/categories/[slug]`}
                   visibleLink={`/categories/${category.id}`}
+                  shallow
                 >
                   <Styled.ChipStyle component="span" label={category.name} />
                 </LinkComponent>
