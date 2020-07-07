@@ -28,6 +28,7 @@ import { ToggleButton } from '@material-ui/lab';
 import { Thread } from 'containers/Thread';
 import { useThread } from 'hooks';
 import { useRouter } from 'next/router';
+import { getActiveNotificationCount } from 'store/actions/notifications';
 
 export const BaseLayout = ({
   children,
@@ -53,6 +54,11 @@ export const BaseLayout = ({
     dispatch,
   ]);
 
+  const getActiveNotificationCountAction = useCallback(
+    () => dispatch(getActiveNotificationCount()),
+    [dispatch],
+  );
+
   // Modal thread
   const { thread, clearThreadSingle } = useThread();
 
@@ -72,6 +78,12 @@ export const BaseLayout = ({
   useEffect(() => {
     checkLocalStorageValuesAction();
   }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      getActiveNotificationCountAction();
+    }
+  }, [isLoggedIn]);
 
   const theme = React.useMemo(
     () =>
@@ -113,7 +125,7 @@ export const BaseLayout = ({
 
           {isPageLoading && <Styled.Loading color="secondary" />}
           {flashMessage && <FlashMessage />}
-          <NoSsr>
+          {/* <NoSsr>
             <Styled.DarkModeToggle>
               <ToggleButton
                 value="check"
@@ -123,7 +135,7 @@ export const BaseLayout = ({
                 {isDarkMode ? <LightIcon /> : <DarkIcon />}
               </ToggleButton>
             </Styled.DarkModeToggle>
-          </NoSsr>
+          </NoSsr> */}
 
           {children}
           <NoSsr>
@@ -146,7 +158,8 @@ export const BaseLayout = ({
 };
 
 export const ThreadModal = styled(Modal)`
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   & .MuiContainer-root {
     outline: none;
     border: none;

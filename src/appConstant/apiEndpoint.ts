@@ -19,10 +19,10 @@ export const LOGIN_ENDPOINT = '/auth/login';
 export const REFRESH_ENDPOINT = '/auth/refresh';
 export const MESSAGES_ENDPOINT = '/messages';
 export const SCORING_ENDPOINT = '/scoring';
-
-export const WEBSOCKET_GATEWAY = '192.168.1.22:3000';
-
+export const NOTIFICATIONS_ENDPOINT = `${USER_ENDPOINT}/me/notifications`;
 export const EMAIL_VALIDATION = `${USER_ENDPOINT}/email-validation`;
 export const RESEND_VALIDATION_EMAIL = `${USER_ENDPOINT}/resend-validation-email`;
 
 export const AVATAR_ENDPOINT = '/avatars';
+
+export const WEBSOCKET_GATEWAY = '192.168.1.22:3000';

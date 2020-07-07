@@ -1,4 +1,8 @@
-import { CHANGE_PAGINATION_PAGE, SET_PAGINATION_DATA } from 'store/actionTypes';
+import {
+  CHANGE_PAGINATION_PAGE,
+  SET_PAGINATION_DATA,
+  RESET_PAGINATION_DATA,
+} from 'store/actionTypes';
 
 export interface IChangePaginationPageAction {
   type: typeof CHANGE_PAGINATION_PAGE;
@@ -20,4 +24,12 @@ export interface ISetPaginationDataPayload {
   pages: number;
   currentPage: number;
   resource: string;
+}
+
+export interface IResetPaginationDataPayload {
+  key: string;
+}
+export interface IResetPaginationDataAction {
+  type: typeof RESET_PAGINATION_DATA;
+  payload: IResetPaginationDataPayload;
 }

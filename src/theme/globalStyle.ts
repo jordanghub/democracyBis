@@ -4,8 +4,9 @@ export const GlobalStyle = createGlobalStyle`
   body, html {
     margin: 0;
   }
+  
   body {
-    min-height: 100vh;
+    min-height: 100vh;    
   }
 
   * {

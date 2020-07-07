@@ -20,7 +20,7 @@ export const Wrapper = styled.div`
     align-items: center;
   }
 
-  & a {
+  & > a {
     color: inherit;
     text-decoration: none;
     text-transform: uppercase;

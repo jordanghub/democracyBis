@@ -3,7 +3,11 @@ jest.mock('utils/Axios');
 jest.mock('next/router', () => ({
   push: jest.fn(() => {}),
 }));
-
+jest.mock('next/config', () => () => ({
+  publicRuntimeConfig: {
+    BASE_API_URL: 'http://127.0.0.1',
+  },
+}));
 import SagaTester from 'redux-saga-tester';
 import Router from 'next/router';
 
@@ -71,6 +75,7 @@ describe('loginFormSubmit generator', () => {
       },
       user: {
         ...initialUserState,
+        token: 'a token',
         isLoggedIn: true,
       },
     };

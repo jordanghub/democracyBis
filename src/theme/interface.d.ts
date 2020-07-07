@@ -28,4 +28,16 @@ export interface IColorTheme extends ITheme {
   formInput: {
     borderColor: string;
   };
+  notifications: {
+    background: string;
+    color: string;
+    single: {
+      dateColor: string;
+      hover: {
+        background: string;
+        color: string;
+        dateColor: string;
+      };
+    };
+  };
 }

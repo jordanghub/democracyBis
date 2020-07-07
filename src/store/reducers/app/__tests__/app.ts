@@ -5,6 +5,8 @@ import {
   setFlashMessage,
   resetFlashMessage,
   changeisPageLoading,
+  addLoadingError,
+  toggleDarkMode,
 } from 'store/actions';
 
 describe('appReducer', () => {
@@ -78,5 +80,70 @@ describe('appReducer', () => {
     expect(appReducer(initialAppState, changeisPageLoading(payload))).toEqual(
       expected,
     );
+  });
+  test('handle ADD_LOADING_ERROR', () => {
+    const payload = {
+      code: 400,
+      message: 'some message',
+      key: 'hello',
+    };
+
+    const expected = {
+      ...initialAppState,
+      loadingErrors: {
+        [payload.key]: {
+          code: payload.code,
+          message: payload.message,
+        },
+      },
+    };
+
+    expect(appReducer(initialAppState, addLoadingError(payload))).toEqual(
+      expected,
+    );
+  });
+
+  test('handle TOGGLE_DARK_MODE without payload', () => {
+    const mockSetItem = jest.fn(() => true);
+    const setItemSpy = jest.spyOn(
+      Object.getPrototypeOf(window.localStorage),
+      'setItem',
+    );
+
+    setItemSpy.mockImplementationOnce(mockSetItem);
+
+    const expected = {
+      ...initialAppState,
+      isDarkMode: true,
+    };
+
+    // @ts-ignore
+    expect(appReducer(initialAppState, toggleDarkMode())).toEqual(expected);
+    expect(mockSetItem).toHaveBeenCalledTimes(1);
+  });
+
+  test('handle TOGGLE_DARK_MODE with payload', () => {
+    // @ts-ignore
+    const mockSetItem = jest.fn(() => true);
+    const setItemSpy = jest.spyOn(
+      Object.getPrototypeOf(window.localStorage),
+      'setItem',
+    );
+
+    setItemSpy.mockImplementationOnce(mockSetItem);
+    const expected = {
+      ...initialAppState,
+      isDarkMode: true,
+    };
+
+    const payload = {
+      status: true,
+    };
+
+    // @ts-ignore
+    expect(appReducer(initialAppState, toggleDarkMode(payload))).toEqual(
+      expected,
+    );
+    expect(mockSetItem).toHaveBeenCalledTimes(0);
   });
 });

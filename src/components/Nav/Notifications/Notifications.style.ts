@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   width: 400px;
-  background: rgb(47, 49, 54);
+  background: ${(props) => props.theme.notifications.background};
+  color: ${(props) => props.theme.notifications.color};
   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
   position: absolute;
   top: 100%;
@@ -13,7 +14,7 @@ export const Wrapper = styled.div`
 export const Header = styled.div`
   padding: 1rem;
   font-weight: bold;
-  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15), 0 0 2px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -36,6 +37,7 @@ export const NotificationsContainer = styled.div`
   height: 400px;
   overflow: auto;
   display: flex;
+  overscroll-behavior: contain;
   flex-direction: column;
   &::-webkit-scrollbar {
     width: 5px;

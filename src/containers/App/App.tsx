@@ -25,10 +25,6 @@ export const AppContainer = ({ children }) => {
     [dispatch],
   );
 
-  const notificationCount = useSelector(
-    (state: TState) => state.notifications.count,
-  );
-
   const handleNotification = useCallback(() => {
     dispatch(incrementNotificationCount());
   }, [dispatch]);
@@ -42,12 +38,20 @@ export const AppContainer = ({ children }) => {
       router.events.off('routeChangeComplete', handleRouteChangeComplete);
     };
   }, [router, handleRouteChange, handleRouteChangeComplete]);
-  useEffect(() => {
-    socket.on('notifications', (data) => {
-      console.log('notification');
-      console.log(data);
+
+  const handleNewNotification = useCallback(
+    (payload) => {
       handleNotification();
-    });
+    },
+    [handleNotification],
+  );
+
+  useEffect(() => {
+    socket.on('notifications', handleNewNotification);
+
+    return () => {
+      socket.off('notifications', handleNewNotification);
+    };
   }, []);
   useEffect(() => {
     if (token) {

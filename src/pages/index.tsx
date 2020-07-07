@@ -7,6 +7,10 @@ import {
   Dialog,
   DialogContent,
   Modal,
+  Zoom,
+  Fade,
+  NoSsr,
+  Slide,
 } from '@material-ui/core';
 
 import { ThreadHomepage as ThreadHomepageType } from 'types/thread';
@@ -21,6 +25,7 @@ import { BaseLayout } from 'containers/Layouts';
 import { useCallback, useState, useEffect } from 'react';
 import { InfiniteScroll, Thread } from 'containers';
 import { useThread } from 'hooks';
+import styled from 'styled-components';
 
 interface HomepageProps {
   threads?: ThreadHomepageType[];
@@ -88,7 +93,13 @@ const Homepage: NextPage<HomepageProps> = () => {
 
         <InfiniteScroll handlePageChange={handlePageChange} />
         {isLoading && (
-          <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+          <div
+            style={{
+              textAlign: 'center',
+              marginTop: '1rem',
+              overflow: 'hidden',
+            }}
+          >
             <CircularProgress />
           </div>
         )}

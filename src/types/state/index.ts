@@ -14,6 +14,7 @@ export interface TState {
 
 export interface INotificationState {
   count: number;
+  items?: any;
 }
 
 export interface IThreadState {

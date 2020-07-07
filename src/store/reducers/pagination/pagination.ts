@@ -1,4 +1,8 @@
-import { CHANGE_PAGINATION_PAGE, SET_PAGINATION_DATA } from 'store/actionTypes';
+import {
+  CHANGE_PAGINATION_PAGE,
+  SET_PAGINATION_DATA,
+  RESET_PAGINATION_DATA,
+} from 'store/actionTypes';
 
 import { IPaginationState } from 'types/state';
 
@@ -21,6 +25,14 @@ export function paginationReducer(
           pages,
           currentPage,
         },
+      };
+    }
+
+    case RESET_PAGINATION_DATA: {
+      const { key } = action.payload;
+      return {
+        ...state,
+        [key]: null,
       };
     }
 

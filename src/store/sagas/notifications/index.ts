@@ -1,53 +1,88 @@
 import { getAxios } from 'utils/Axios';
 
-import { takeLatest, put } from 'redux-saga/effects';
+import { takeLatest, put, select, debounce, call } from 'redux-saga/effects';
 
 import {
-  FETCH_SCORING_CATEGORIES,
-  FETCH_THREAD_VOTES,
-  SCORING_FORM_SUBMIT,
-  FETCH_MESSAGE_VOTES,
-  FETCH_USER_VOTE,
-  SET_NOTIFICATION_COUNT,
+  FETCH_NOTIFICATIONS,
+  GET_ACTIVE_NOTIFICATION_COUNT,
 } from 'store/actionTypes';
 
-import {
-  formSubmitSuccess,
-  setScoringCategories,
-  setThreadVotes,
-  setMessageVote,
-  setCurrentUserMessageVote,
-  setFlashMessage,
-} from 'store/actions';
-
-import {
-  THREAD_LIST_ROUTE,
-  BASE_API_URL,
-  SCORING_ENDPOINT,
-  MESSAGES_ENDPOINT,
-} from 'appConstant/apiEndpoint';
+import { NOTIFICATIONS_ENDPOINT, BASE_API_URL } from 'appConstant/apiEndpoint';
 import { AxiosResponse } from 'axios';
-import { ICustomAxiosConfig } from 'types/axios';
+import {
+  setNotifications,
+  setNotificationCount,
+} from 'store/actions/notifications';
+import { TState } from 'types/state';
+import { setPaginationData } from 'store/actions';
 
-// export function* getCurrentUserMessageVote({ type, payload }) {
-//   const axios = getAxios();
+function* fetchNotifications({ type, payload }) {
+  const axios = getAxios();
 
-//   const customConfig: ICustomAxiosConfig = {
-//     redirectOnFailure: false,
-//   };
-//   try {
-//     const response = yield axios.get(
-//       `${BASE_API_URL}${MESSAGES_ENDPOINT}/${payload.id}/votes/me`,
-//       customConfig,
-//     );
+  const notificationsCount = yield select(
+    (state: TState) => state.notifications.count,
+  );
 
-//     yield put(
-//       setCurrentUserMessageVote({
-//         id: payload.id,
-//         votes: response.data,
-//       }),
-//     );
-//   } catch (err) {}
-// }
+  const notifications = yield select(
+    (state: TState) => state.notifications.items,
+  );
 
-export const notificationsSaga = [];
+  const page = payload?.page || 1;
+
+  try {
+    const response: AxiosResponse = yield axios.get(
+      `${BASE_API_URL}${NOTIFICATIONS_ENDPOINT}?page=${page}`,
+    );
+
+    const items = [...(notifications || []), ...response.data.items];
+
+    if (notificationsCount > 0) {
+      yield call(putNotificationsAsViewed);
+    }
+
+    yield put(
+      setPaginationData({
+        resource: 'notifications',
+        count: response.data.count,
+        pages: response.data.pages,
+        currentPage: response.data.currentPage,
+      }),
+    );
+
+    yield put(setNotifications(items));
+  } catch (err) {}
+}
+
+function* getActiveNotifiationCount() {
+  const axios = getAxios();
+
+  try {
+    const response: AxiosResponse = yield axios.get(
+      `${BASE_API_URL}${NOTIFICATIONS_ENDPOINT}?count=true`,
+    );
+
+    yield put(
+      setNotificationCount({
+        count: response.data.activeNotifications,
+      }),
+    );
+  } catch (err) {}
+}
+
+function* putNotificationsAsViewed() {
+  const axios = getAxios();
+  try {
+    yield axios.put(`${BASE_API_URL}${NOTIFICATIONS_ENDPOINT}`);
+
+    yield put(
+      setNotificationCount({
+        count: 0,
+      }),
+    );
+  } catch (err) {}
+}
+
+export const notificationsSaga = [
+  debounce(500, FETCH_NOTIFICATIONS, fetchNotifications),
+  takeLatest(GET_ACTIVE_NOTIFICATION_COUNT, getActiveNotifiationCount),
+];

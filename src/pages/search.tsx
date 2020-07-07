@@ -136,7 +136,6 @@ const Search: NextPage<ISearchProps> = ({ searchValue }) => {
 Search.getInitialProps = async (ctx) => {
   const { value } = ctx.query;
 
-  console.log(value);
   return {
     searchValue: value as string,
   };

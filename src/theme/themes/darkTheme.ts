@@ -29,4 +29,16 @@ export const darkTheme: DefaultTheme & IColorTheme = {
   formInput: {
     borderColor: 'white',
   },
+  notifications: {
+    background: 'rgb(47,49,54)',
+    color: 'white',
+    single: {
+      dateColor: 'lightgray',
+      hover: {
+        background: 'rgba(100, 100, 100, 0.8)',
+        color: 'back',
+        dateColor: 'white',
+      },
+    },
+  },
 };

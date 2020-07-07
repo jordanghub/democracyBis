@@ -5,4 +5,5 @@ import {
 
 export type PaginationReducerActionTypes =
   | IChangePaginationPageAction
-  | ISetPaginationDataAction;
+  | ISetPaginationDataAction
+  | IResetPaginationDataAction;

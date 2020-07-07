@@ -6,6 +6,5 @@ export const Wrapper = styled.a`
 
   &:hover {
     cursor: pointer;
-    text-decoration: underline;
   }
 `;

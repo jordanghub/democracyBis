@@ -121,20 +121,25 @@ export const Nav = memo(
                 justify="flex-end"
                 id="desktop-nav"
               >
-                <div>
-                  {isNotificationMenuOpen && (
-                    <Notifications handleClose={handleNotificationMenuClick} />
-                  )}
+                {isLoggedIn && (
+                  <div>
+                    {isNotificationMenuOpen && (
+                      <Notifications
+                        handleClose={handleNotificationMenuClick}
+                      />
+                    )}
 
-                  <Badge
-                    color="secondary"
-                    overlap="circle"
-                    badgeContent={notificationCount || 0}
-                    onClick={handleNotificationMenuClick}
-                  >
-                    <NotificationIcon />
-                  </Badge>
-                </div>
+                    <Badge
+                      color="secondary"
+                      overlap="circle"
+                      badgeContent={notificationCount || 0}
+                      onClick={handleNotificationMenuClick}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <NotificationIcon />
+                    </Badge>
+                  </div>
+                )}
                 <Typography
                   ref={menuRef}
                   component="span"

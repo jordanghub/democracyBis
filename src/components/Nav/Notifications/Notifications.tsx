@@ -1,12 +1,64 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, {
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import * as Styled from './Notifications.style';
 
 import { Typography, CircularProgress } from '@material-ui/core';
-import { Notification } from './Notification/Notification';
+import { ThreadMessageNotification } from './Notification/Notification';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  fetchNotifications,
+  clearNotifications,
+} from 'store/actions/notifications';
+import { TState } from 'types/state';
+import { IThreadMessageNotification } from './Notification/interface';
+import { usePagination } from 'hooks';
 
 export const Notifications = ({ handleClose }) => {
   const node = useRef(null);
+
+  const dispatch = useDispatch();
+
+  const { items } = useSelector((state: TState) => state.notifications);
+
+  const fetchNotificationsAction = useCallback(
+    (payload = null) => dispatch(fetchNotifications(payload)),
+    [],
+  );
+
+  const { isLoading, handlePageChange } = usePagination(
+    'notifications',
+    fetchNotificationsAction,
+  );
+
+  const clearNotificationsAction = useCallback(
+    () => dispatch(clearNotifications()),
+    [dispatch],
+  );
+
+  useEffect(() => {
+    fetchNotificationsAction();
+
+    return () => {
+      clearNotificationsAction();
+    };
+  }, []);
+
+  const handleScroll = useCallback(
+    (evt) => {
+      const sizes = evt.target.getBoundingClientRect();
+
+      if (evt.target.scrollHeight === sizes.height + evt.target.scrollTop) {
+        handlePageChange();
+      }
+    },
+    [handlePageChange],
+  );
 
   const handleClickOut = useCallback(
     (e) => {
@@ -25,6 +77,28 @@ export const Notifications = ({ handleClose }) => {
     };
   }, [handleClickOut]);
 
+  const notifs = useMemo(
+    () =>
+      items?.map((item) => {
+        switch (item.type) {
+          case 'threadMessage': {
+            const notificationPayload: IThreadMessageNotification = JSON.parse(
+              item.payload,
+            );
+            return (
+              <ThreadMessageNotification
+                key={item.id}
+                active={item.active}
+                payload={notificationPayload}
+                createdAt={item.createdAt}
+              />
+            );
+          }
+        }
+      }),
+    [items],
+  );
+
   return (
     <Styled.Wrapper ref={node}>
       <Styled.Header>
@@ -33,17 +107,13 @@ export const Notifications = ({ handleClose }) => {
           <CloseIcon onClick={handleClose} />
         </Styled.Actions>
       </Styled.Header>
-      <Styled.NotificationsContainer>
-        {/* <div style={{ margin: 'auto' }}>
-          <CircularProgress style={{ color: 'white' }} />
-        </div> */}
-        <Notification />
-        <Notification />
-        <Notification />
-        <Notification />
-        <Notification />
-        <Notification />
-        <Notification />
+      <Styled.NotificationsContainer onScroll={handleScroll}>
+        {notifs}
+        {(isLoading || !notifs) && (
+          <div style={{ margin: 'auto' }}>
+            <CircularProgress />
+          </div>
+        )}
       </Styled.NotificationsContainer>
     </Styled.Wrapper>
   );

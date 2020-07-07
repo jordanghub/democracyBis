@@ -25,6 +25,7 @@ export const Wrapper = styled.div`
   background: ${(props) => props.theme.default.background};
   color: ${(props) => props.theme.default.textColor};
   min-height: 100vh;
+  overflow-x: hidden;
 `;
 
 export const Loading = styled(LinearProgress)`

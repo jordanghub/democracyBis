@@ -26,6 +26,12 @@ import {
   FETCH_USER_VOTE,
 } from 'store/actionTypes';
 
+jest.mock('next/config', () => () => ({
+  publicRuntimeConfig: {
+    BASE_API_URL: 'http://127.0.0.1',
+  },
+}));
+
 jest.mock('utils/Axios');
 
 beforeEach(() => {

@@ -1,7 +1,11 @@
 // @ts-nocheck
 jest.mock('utils/Axios');
 jest.mock('next/router');
-
+jest.mock('next/config', () => () => ({
+  publicRuntimeConfig: {
+    BASE_API_URL: 'http://127.0.0.1',
+  },
+}));
 Router;
 import SagaTester from 'redux-saga-tester';
 import { getAxios } from 'utils/Axios';
@@ -380,7 +384,7 @@ describe('createThreadAnswer', () => {
       },
       forms: {
         forms: {
-          'thread-answer': {
+          'answer-thread': {
             errors: null,
             initialData: null,
             submitSuccess: true,

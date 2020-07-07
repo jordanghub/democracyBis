@@ -34,7 +34,11 @@ export const ThreadLink = memo(({ slug, children }: IThreadLink) => {
   };
 
   return (
-    <Styled.Wrapper onClick={handleClick} href={`/thread/${slug}`}>
+    <Styled.Wrapper
+      onClick={handleClick}
+      href={`/thread/${slug}`}
+      className="thread-link"
+    >
       {children}
     </Styled.Wrapper>
   );
