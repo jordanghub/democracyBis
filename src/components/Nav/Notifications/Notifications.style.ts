@@ -1,3 +1,4 @@
+import { Typography } from '@material-ui/core';
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
@@ -62,3 +63,9 @@ export const NotificationsContainer = styled.div`
     background: rgba(190, 190, 190, 0.3);
   }
 `;
+
+export const NoNotificationMessage = styled(Typography)`
+  padding: 1rem;
+  text-align: center;
+  font-family: inherit;
+`

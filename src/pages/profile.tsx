@@ -74,8 +74,8 @@ export function ScrollableTabsButtonForce() {
           aria-label="profile menu list"
         >
           <Tab label="Informations" icon={<UserIcon />} {...a11yProps(0)} />
-          <Tab label="Mes threads" icon={<ThreadIcon />} {...a11yProps(1)} />
-          <Tab label="Mes favoris" icon={<FavoriteIcon />} {...a11yProps(2)} />
+          {/* <Tab label="Mes threads" icon={<ThreadIcon />} {...a11yProps(1)} />
+          <Tab label="Mes favoris" icon={<FavoriteIcon />} {...a11yProps(2)} /> */}
         </Tabs>
       </AppBar>
 

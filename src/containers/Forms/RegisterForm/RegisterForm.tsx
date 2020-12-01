@@ -87,9 +87,12 @@ export const RegisterForm = () => {
       {isSuccess && (
         <Alert severity="success">
           <AlertTitle> Formulaire envoyé avec succès</AlertTitle>
-          <span>
+          {/* <span>
             L'inscription s'est déroulée avec succès, vous devez vérifier votre
             adresse e-mail avant de pouvoir vous connecter
+          </span> */}
+          <span>
+            L'inscription s'est déroulée avec succès, vous pouvez vous connecter
           </span>
         </Alert>
       )}

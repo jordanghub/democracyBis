@@ -25,4 +25,4 @@ export const RESEND_VALIDATION_EMAIL = `${USER_ENDPOINT}/resend-validation-email
 
 export const AVATAR_ENDPOINT = '/avatars';
 
-export const WEBSOCKET_GATEWAY = '192.168.1.22:3000';
+export const WEBSOCKET_GATEWAY = publicRuntimeConfig.API_URL;

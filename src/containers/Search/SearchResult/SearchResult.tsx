@@ -61,7 +61,7 @@ export const SearchResult = ({
         {!searchResult && <CircularProgress size={40} />}
         {threadResults}
         {categoriesResult}
-        <a href="#">Voir plus</a>
+        {/* <a href="#">Voir plus</a> */}
       </Paper>
     </Styled.SearchResult>
   );

@@ -114,6 +114,12 @@ export const Notifications = ({ handleClose }) => {
             <CircularProgress />
           </div>
         )}
+
+        {
+          notifs && notifs.length === 0 && (
+            <Styled.NoNotificationMessage>Aucune notification</Styled.NoNotificationMessage>
+          )
+        }
       </Styled.NotificationsContainer>
     </Styled.Wrapper>
   );
